@@ -14,17 +14,23 @@ ERROR_WINDOW () {
     exit 0
 }
 
+# INFO_WINDOW関数
+INFO_WINDOW () {
+    zenity --info --width 350 --title $0 --text $1
+    exit 0
+}
+
 # ファイル有無の確認
 if [ -e $OSRE ]; then
-    echo "${VIEW} ${OSRE} found."
+    printf "${VIEW} \033[32m${OSRE} found.\033[m\n"
     if [ -e $LSBRE ]; then
-    echo "${VIEW} ${LSBRE} found."
+    printf "${VIEW} \033[32m${LSBRE} found.\033[m\n"
     else
-        echo "${VIEW} ${LSBRE} not found."
+        printf "${VIEW} \033[31m${LSBRE} not found.\033[m\n"
         ERROR_WINDOW "${LSBRE} not found."
     fi
 else
-    echo "${VIEW} ${OSRE} not found."
+    printf "${VIEW} \033[31m${OSRE} not found.\033[m\n"
     ERROR_WINDOW "${OSRE} not found."
 fi
 
@@ -40,10 +46,10 @@ do
         if [ "${SELECT}" = "Change name" ]; then
             # Change name
             sudo cp $OSRE $OSRE_BAK || ERROR_WINDOW "Error. Failed to copy the file\"${OSRE}\"."
-            echo "${VIEW} ${OSRE} has been backed up."
+            printf "${VIEW} \033[32m${OSRE} has been backed up.\033[m\n"
             sudo cp $LSBRE $LSBRE_BAK || ERROR_WINDOW "Error. Failed to copy the file\"${LSBRE}\"."
-            echo "${VIEW} ${LSBRE} has been backed up."
-            echo "${VIEW} The back up was complate."
+            printf "${VIEW} \033[32m${LSBRE} has been backed up.\033[m\n"
+            printf "${VIEW} \033[32mThe back up was complate.\033[m\n"
             # 新しい名前
             while :
             do
@@ -59,11 +65,10 @@ do
                     0)
                         # 本処理
                         sudo sed -i "5 s/${OLDNAME}/${NEWNAME}/" $OSRE || ERROR_WINDOW "Error. Failed to edit the file\"${OSRE}\"."
-                        echo "${VIEW} The changes was complete to \"${OSRE}\""
+                        printf "${VIEW} \033[32mThe changes was complete to \"${OSRE}\"\033[m\n"
                         sudo sed -i "4 s/${OLDNAME}/${NEWNAME}/" $LSBRE || ERROR_WINDOW "Error. Failed to edit the file\"${LSBRE}\"."
-                        echo "${VIEW} The changes was complete to \"${LSBRE}\""
-                        zenity --info --width 350 --title $0 --text "Changes completed successfully."
-                        exit 0
+                        printf "${VIEW} \033[32mThe changes was complete to \"${LSBRE}\"\033[m\n"
+                        INFO_WINDOW "Changes completed successfully."
                     ;;
                     1)
                         break
@@ -78,15 +83,15 @@ do
         elif [ "${SELECT}"="Restore" ]; then
             # Restore
             if [ -e $OSRE_BAK ]; then
-                echo "${VIEW} ${OSRE_BAK} found."
+                printf "${VIEW} \033[32m${OSRE_BAK} found.\033[m\n"
                 if [ -e $LSBRE_BAK ]; then
-                echo "${VIEW} ${LSBRE_BAK} found."
+                printf "${VIEW} \033[32m${LSBRE_BAK} found.\033[m\n"
                 else
-                    echo "${VIEW} ${LSBRE_BAK} not found."
+                    printf "${VIEW} \033[31m${LSBRE_BAK} not found.\033[m\n"
                     ERROR_WINDOW "${LSBRE_BAK} not found."
                 fi
             else
-                echo "${VIEW} ${OSRE_BAK} not found."
+                printf "${VIEW} \033[31m${OSRE_BAK} not found.\033[m\n"
                 ERROR_WINDOW "${OSRE_BAK} not found."
             fi
             zenity --question --width 350 --title $0 --text "Do you want to restore the files?"
@@ -96,19 +101,18 @@ do
             0)
                 # 本処理
                 sudo cp $OSRE_BAK $OSRE || ERROR_WINDOW "Error. Failed to copy the file\"${OSRE_BAK}\"."
-                echo "${VIEW} Restoration of ${OSRE} is complete."
+                printf "${VIEW} \033[32mRestoration of ${OSRE} is complete.\033[m\n"
                 sudo cp $LSBRE_BAK $LSBRE || ERROR_WINDOW "Error. Failed to copy the file\"${LSBRE_BAK}\"."
-                echo "${VIEW} Restoration of ${LSBRE} is complete."
-                echo "${VIEW} Restore completed successfully."
-                zenity --info --width 350 --title $0 --text "Restore completed successfully."
-                exit 0
+                printf "${VIEW} \033[32mRestoration of ${LSBRE} is complete.\033[m\n"
+                printf "${VIEW} \033[32mRestore completed successfully.\033[m\n"
+                INFO_WINDOW "Restore completed successfully."
             ;;
             1)
                 break
             ;;
             esac
         else
-            echo "${VIEW} Error."
+            printf "${VIEW} \033[31mError. The processing could not be executed normally.\033[m\n"
         fi
         break
     ;;
