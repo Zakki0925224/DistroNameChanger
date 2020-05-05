@@ -33,10 +33,10 @@ while :
 do
     SELECT=$(zenity --list --radiolist --column=Selected --column "Functions" True "Change name" False "Restore"  --text "Select the functions..." --title $0)
     CODE1=$?
-    echo $CODE1
+    # echo $CODE1
     case $CODE1 in
     0)
-        echo $SELECT
+        # echo $SELECT
         if [ "${SELECT}" = "Change name" ]; then
             # Change name
             sudo cp $OSRE $OSRE_BAK || ERROR_WINDOW "Error. Failed to copy the file\"${OSRE}\"."
@@ -49,12 +49,12 @@ do
             do
                 NEWNAME=$(zenity --entry --title $0 --text "Please new DistroName...")
                 CODE2=$?
-                echo $CODE2
+                # echo $CODE2
                 case $CODE2 in
                 0)
                     zenity --question --width 350 --title $0 --text "Change \"${OLDNAME}\" to \"${NEWNAME}\" ."
                     CODE3=$?
-                    echo $CODE3
+                    # echo $CODE3
                     case $CODE3 in
                     0)
                         # 本処理
@@ -91,7 +91,7 @@ do
             fi
             zenity --question --width 350 --title $0 --text "Do you want to restore the files?"
             CODE4=$?
-            echo $CODE4
+            # echo $CODE4
             case $CODE4 in
             0)
                 # 本処理
