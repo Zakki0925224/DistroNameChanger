@@ -1,6 +1,7 @@
 # DistroNameChanger
 
 os-releaseとlsb-releaseのOS名に該当する部分の変更を簡易化します。
+neofetchの"OS"の項目を書き換えることができます。
 
 ## 変更される部分
 <dl>
