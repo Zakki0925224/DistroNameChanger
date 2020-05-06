@@ -12,9 +12,8 @@ os-releaseとlsb-releaseのOS名に該当する部分の変更を簡易化しま
 
 ## 使い方
 ```Bash
-    $ sh DistroNameChanger.sh
-```
-または
-```Bash
-    $ bash DistroNameChanger.sh
+    git clone https://github.com/Zakki0925224/DistroNameChanger.git
+    cd DistroNameChanger
+    sh ./DistroNameChanger.sh
+    # または bash ./DistroNamechanger.sh
 ```
