@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 VIEW="[$0]:"
 OSRE="/usr/lib/os-release"
