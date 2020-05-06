@@ -30,6 +30,16 @@ INFO_WINDOW () {
 
 }
 
+# エラー出力
+ERRPRINT () {
+    printf "${VIEW} \033[31m${1}\033[m\n"
+}
+
+# OK出力
+OKPRINT () {
+    printf "${VIEW} \033[32m${1}\033[m\n"
+}
+
 # 処理を呼び出す
 CALL () {
     bash $0
@@ -38,19 +48,19 @@ CALL () {
 
 # ファイル有無の確認
 if [ -e $OSRE ]; then
-    printf "${VIEW} \033[32m${OSRE} found.\033[m\n"
+    OKPRINT "${OSRE} found."
 
     if [ -e $LSBRE ]; then
-    printf "${VIEW} \033[32m${LSBRE} found.\033[m\n"
+    OKPRINT "${LSBRE} found."
 
     else
-        printf "${VIEW} \033[31m${LSBRE} not found.\033[m\n"
+        ERRPRINT "${LSBRE} not found."
         ERROR_WINDOW "${LSBRE} not found."
 
     fi
 
 else
-    printf "${VIEW} \033[31m${OSRE} not found.\033[m\n"
+    ERRPRINT "${OSRE} not found."
     ERROR_WINDOW "${OSRE} not found."
 
 fi
@@ -84,12 +94,12 @@ case $SELECT in
     "Change name")
         # Change name
         sudo cp $OSRE $OSRE_BAK || ERROR_WINDOW "Error. Failed to copy the file\"${OSRE}\"."
-        printf "${VIEW} \033[32m${OSRE} has been backed up.\033[m\n"
+        OKPRINT "${OSRE} has been backed up."
 
         sudo cp $LSBRE $LSBRE_BAK || ERROR_WINDOW "Error. Failed to copy the file\"${LSBRE}\"."
-        printf "${VIEW} \033[32m${LSBRE} has been backed up.\033[m\n"
+        OKPRINT "${LSBRE} has been backed up."
 
-        printf "${VIEW} \033[32mThe back up was complate.\033[m\n"
+        OKPRINT "The back up was complate."
 
         NEWNAME=$(
             zenity \
@@ -114,10 +124,10 @@ case $SELECT in
                     0)
                         # 本処理
                         sudo sed -i "5 s/${OLDNAME}/${NEWNAME}/" $OSRE || ERROR_WINDOW "Error. Failed to edit the file\"${OSRE}\"."
-                        printf "${VIEW} \033[32mThe changes was complete to \"${OSRE}\"\033[m\n"
+                        OKPRINT "The changes was complete to \"${OSRE}\""
 
                         sudo sed -i "4 s/${OLDNAME}/${NEWNAME}/" $LSBRE || ERROR_WINDOW "Error. Failed to edit the file\"${LSBRE}\"."
-                        printf "${VIEW} \033[32mThe changes was complete to \"${LSBRE}\"\033[m\n"
+                        OKPRINT "The changes was complete to \"${LSBRE}\""
 
                         INFO_WINDOW "Changes completed successfully."
 
@@ -140,18 +150,18 @@ case $SELECT in
     "Restore")
         # Restore
         if [ -e $OSRE_BAK ]; then
-            printf "${VIEW} \033[32m${OSRE_BAK} found.\033[m\n"
+            OKPRINT "${OSRE_BAK} found."
 
             if [ -e $LSBRE_BAK ]; then
-            printf "${VIEW} \033[32m${LSBRE_BAK} found.\033[m\n"
+            OKPRINT "${LSBRE_BAK} found."
 
             else
-                printf "${VIEW} \033[31m${LSBRE_BAK} not found.\033[m\n"
+                ERRPRINT "${LSBRE_BAK} not found."
                 ERROR_WINDOW "${LSBRE_BAK} not found."
 
             fi
         else
-            printf "${VIEW} \033[31m${OSRE_BAK} not found.\033[m\n"
+            ERRPRINT "${OSRE_BAK} not found."
             ERROR_WINDOW "${OSRE_BAK} not found."
 
         fi
@@ -168,12 +178,12 @@ case $SELECT in
             0)
                 # 本処理
                 sudo cp $OSRE_BAK $OSRE || ERROR_WINDOW "Error. Failed to copy the file\"${OSRE_BAK}\"."
-                printf "${VIEW} \033[32mRestoration of ${OSRE} is complete.\033[m\n"
+                OKPRINT "Restoration of ${OSRE} is complete."
 
                 sudo cp $LSBRE_BAK $LSBRE || ERROR_WINDOW "Error. Failed to copy the file\"${LSBRE_BAK}\"."
-                printf "${VIEW} \033[32mRestoration of ${LSBRE} is complete.\033[m\n"
+                OKPRINT "Restoration of ${LSBRE} is complete."
 
-                printf "${VIEW} \033[32mRestore completed successfully.\033[m\n"
+                OKPRINT "Restore completed successfully."
                 INFO_WINDOW "Restore completed successfully."
             ;;
             1)
@@ -183,7 +193,7 @@ case $SELECT in
 
     ;;
     *)
-        printf "${VIEW} \033[31mError. Exception occured.\033[m\n"
+        ERRPRINT "Error. Exception occured."
 
         exit 0
 
