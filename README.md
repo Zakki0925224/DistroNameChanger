@@ -14,3 +14,7 @@ os-releaseとlsb-releaseのOS名に該当する部分の変更を簡易化しま
 ```Bash
     $ sh DistroNameChanger.sh
 ```
+または
+```Bash
+    $ bash DistroNameChanger.sh
+```
