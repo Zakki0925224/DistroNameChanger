@@ -33,6 +33,7 @@ INFO_WINDOW () {
 # エラー出力
 ERRPRINT () {
     printf "${VIEW} \033[31m${1}\033[m\n"
+    ERROR_WINDOW "${1}"
 }
 
 # OK出力
@@ -55,13 +56,11 @@ if [ -e $OSRE ]; then
 
     else
         ERRPRINT "${LSBRE} not found."
-        ERROR_WINDOW "${LSBRE} not found."
 
     fi
 
 else
     ERRPRINT "${OSRE} not found."
-    ERROR_WINDOW "${OSRE} not found."
 
 fi
 
@@ -93,10 +92,10 @@ esac
 case $SELECT in
     "Change name")
         # Change name
-        sudo cp $OSRE $OSRE_BAK || ERROR_WINDOW "Error. Failed to copy the file\"${OSRE}\"."
+        sudo cp $OSRE $OSRE_BAK || ERRPRINT "Error. Failed to copy the file\"${OSRE}\"."
         OKPRINT "${OSRE} has been backed up."
 
-        sudo cp $LSBRE $LSBRE_BAK || ERROR_WINDOW "Error. Failed to copy the file\"${LSBRE}\"."
+        sudo cp $LSBRE $LSBRE_BAK || ERRPRINT "Error. Failed to copy the file\"${LSBRE}\"."
         OKPRINT "${LSBRE} has been backed up."
 
         OKPRINT "The back up was complate."
@@ -123,10 +122,10 @@ case $SELECT in
                 case $CODE3 in
                     0)
                         # 本処理
-                        sudo sed -i "5 s/${OLDNAME}/${NEWNAME}/" $OSRE || ERROR_WINDOW "Error. Failed to edit the file\"${OSRE}\"."
+                        sudo sed -i "5 s/${OLDNAME}/${NEWNAME}/" $OSRE || ERRPRINT "Error. Failed to edit the file\"${OSRE}\"."
                         OKPRINT "The changes was complete to \"${OSRE}\""
 
-                        sudo sed -i "4 s/${OLDNAME}/${NEWNAME}/" $LSBRE || ERROR_WINDOW "Error. Failed to edit the file\"${LSBRE}\"."
+                        sudo sed -i "4 s/${OLDNAME}/${NEWNAME}/" $LSBRE || ERRPRINT "Error. Failed to edit the file\"${LSBRE}\"."
                         OKPRINT "The changes was complete to \"${LSBRE}\""
 
                         INFO_WINDOW "Changes completed successfully."
@@ -157,12 +156,10 @@ case $SELECT in
 
             else
                 ERRPRINT "${LSBRE_BAK} not found."
-                ERROR_WINDOW "${LSBRE_BAK} not found."
 
             fi
         else
             ERRPRINT "${OSRE_BAK} not found."
-            ERROR_WINDOW "${OSRE_BAK} not found."
 
         fi
 
@@ -177,10 +174,10 @@ case $SELECT in
         case $CODE4 in
             0)
                 # 本処理
-                sudo cp $OSRE_BAK $OSRE || ERROR_WINDOW "Error. Failed to copy the file\"${OSRE_BAK}\"."
+                sudo cp $OSRE_BAK $OSRE || ERRPRINT "Error. Failed to copy the file\"${OSRE_BAK}\"."
                 OKPRINT "Restoration of ${OSRE} is complete."
 
-                sudo cp $LSBRE_BAK $LSBRE || ERROR_WINDOW "Error. Failed to copy the file\"${LSBRE_BAK}\"."
+                sudo cp $LSBRE_BAK $LSBRE || ERRPRINT "Error. Failed to copy the file\"${LSBRE_BAK}\"."
                 OKPRINT "Restoration of ${LSBRE} is complete."
 
                 OKPRINT "Restore completed successfully."
