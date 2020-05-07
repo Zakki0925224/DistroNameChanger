@@ -192,8 +192,6 @@ case $SELECT in
     *)
         ERRPRINT "Error. Exception occured."
 
-        exit 0
-
     ;;
 esac
 
