@@ -130,8 +130,6 @@ case $SELECT in
 
                         INFO_WINDOW "Changes completed successfully."
 
-                        exit 0
-
                     ;;
                     1)
                         :
