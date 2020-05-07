@@ -14,7 +14,7 @@ ERROR_WINDOW () {
     --error \
     --width 350 \
     --title $0 \
-    --text $1
+    --text "${1}"
     exit 0
 
 }
@@ -25,7 +25,7 @@ INFO_WINDOW () {
     --info \
     --width 350 \
     --title $0 \
-    --text $1
+    --text "${1}"
     exit 0
 
 }
