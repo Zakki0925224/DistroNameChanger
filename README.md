@@ -17,3 +17,7 @@ neofetchの"OS"の項目を書き換えることができます。
     cd DistroNameChanger
     bash ./DistroNamechanger.sh
 ```
+
+## 注意
+
+os-releaseの"PRETTY_NAME"の項目と、lsb-releaseの"DISTRIB_DESCRIPTION"の項目が事前に一致してないとうまく動作しません。
