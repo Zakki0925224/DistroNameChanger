@@ -12,10 +12,19 @@ neofetchの"OS"の項目を書き換えることができます。
 </dl>
 
 ## 使い方
+### インストール
 ```Bash
     git clone https://github.com/Zakki0925224/DistroNameChanger.git
     cd DistroNameChanger
-    bash ./DistroNamechanger.sh
+    sudo bash ./setup.sh install
+```
+### アンインストール
+```Bash
+    sudo bash ./setup.sh uninstall
+```
+### 起動
+```Bash
+    sudo DistroNameChanger
 ```
 
 ## 注意
