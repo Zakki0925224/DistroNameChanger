@@ -1,15 +1,18 @@
 #!/usr/bin/env bash
 
-VIEW="[$0]:"
-OSRE="/usr/lib/os-release"
-LSBRE="/etc/lsb-release"
-OSRE_BAK="$HOME/os-release.bak"
-LSBRE_BAK="$HOME/lsb-release.bak"
-OLDNAME=$(lsb_release -d | awk -F "\t" '{print $2}' | awk 'BEGIN{ORS = ""}{print $0}')
+view="[$0]:"
+osre="/usr/lib/os-release"
+lsbre="/etc/lsb-release"
+
+# os-releaseとlsb-releaseのバックアップ先です。自由に変更できます。
+osre_bak="$HOME/os-release.bak"
+lsbre_bak="$HOME/lsb-release.bak"
+
+oldname=$(lsb_release -d | awk -F "\t" '{print $2}' | awk 'BEGIN{ORS = ""}{print $0}')
 
 
-# ERROR_WINDOW関数
-ERROR_WINDOW () {
+# error_window関数
+error_window () {
     zenity \
     --error \
     --width 350 \
@@ -19,8 +22,8 @@ ERROR_WINDOW () {
 
 }
 
-# INFO_WINDOW関数
-INFO_WINDOW () {
+# info_window関数
+info_window () {
     zenity \
     --info \
     --width 350 \
@@ -31,41 +34,41 @@ INFO_WINDOW () {
 }
 
 # エラー出力
-ERRPRINT () {
-    printf "${VIEW} \033[31m${1}\033[m\n"
-    ERROR_WINDOW "${1}"
+errprint () {
+    printf "${view} \033[31m${1}\033[m\n"
+    error_window "${1}"
 }
 
 # OK出力
-OKPRINT () {
-    printf "${VIEW} \033[32m${1}\033[m\n"
+okprint () {
+    printf "${view} \033[32m${1}\033[m\n"
 }
 
 # 処理を呼び出す
-CALL () {
+call () {
     bash $0
 }
 
 
 # ファイル有無の確認
-if [ -e $OSRE ]; then
-    OKPRINT "${OSRE} found."
+if [ -e $osre ]; then
+    okprint "${osre} found."
 
-    if [ -e $LSBRE ]; then
-    OKPRINT "${LSBRE} found."
+    if [ -e $lsbre ]; then
+    okprint "${lsbre} found."
 
     else
-        ERRPRINT "${LSBRE} not found."
+        errprint "${lsbre} not found."
 
     fi
 
 else
-    ERRPRINT "${OSRE} not found."
+    errprint "${osre} not found."
 
 fi
 
 # メインメニュー
-SELECT=$(
+select=$(
     zenity \
     --title $0 \
     --info \
@@ -76,9 +79,9 @@ SELECT=$(
 
 )
 
-MAINMENU=$?
+mainmenu=$?
 
-case $MAINMENU in
+case $mainmenu in
     0)
         exit 0
         
@@ -89,46 +92,47 @@ case $MAINMENU in
     ;;
 esac
 
-case $SELECT in
+case $select in
     "Change name")
         # Change name
-        sudo cp $OSRE $OSRE_BAK || ERRPRINT "Error. Failed to copy the file\"${OSRE}\"."
-        OKPRINT "${OSRE} has been backed up."
+        sudo cp $osre $osre_bak || errprint "Error. Failed to copy the file\"${osre}\"."
+        okprint "${osre} has been backed up."
 
-        sudo cp $LSBRE $LSBRE_BAK || ERRPRINT "Error. Failed to copy the file\"${LSBRE}\"."
-        OKPRINT "${LSBRE} has been backed up."
+        sudo cp $lsbre $lsbre_bak || errprint "Error. Failed to copy the file\"${lsbre}\"."
+        okprint "${lsbre} has been backed up."
 
-        OKPRINT "The back up was complate."
+        okprint "The back up was complate."
 
-        NEWNAME=$(
+        newname=$(
             zenity \
             --entry \
             --title $0 \
             --text "Please new DistroName..."
             
             )
-        CODE2=$?
 
-        case $CODE2 in
+        entry=$?
+
+        case $entry in
             0)
                 zenity \
                 --question \
                 --width 350 \
                 --title $0 \
-                --text "Change \"${OLDNAME}\" to \"${NEWNAME}\" ."
+                --text "Change \"${oldname}\" to \"${newname}\" ."
 
-                CODE3=$?
+                lastcheck=$?
 
-                case $CODE3 in
+                case $lastcheck in
                     0)
                         # 本処理
-                        sudo sed -i "5 s/${OLDNAME}/${NEWNAME}/" $OSRE || ERRPRINT "Error. Failed to edit the file\"${OSRE}\"."
-                        OKPRINT "The changes was complete to \"${OSRE}\""
+                        sudo sed -i "5 s/${oldname}/${newname}/" $osre || errprint "Error. Failed to edit the file\"${osre}\"."
+                        okprint "The changes was complete to \"${osre}\""
 
-                        sudo sed -i "4 s/${OLDNAME}/${NEWNAME}/" $LSBRE || ERRPRINT "Error. Failed to edit the file\"${LSBRE}\"."
-                        OKPRINT "The changes was complete to \"${LSBRE}\""
+                        sudo sed -i "4 s/${oldname}/${newname}/" $lsbre || errprint "Error. Failed to edit the file\"${lsbre}\"."
+                        okprint "The changes was complete to \"${lsbre}\""
 
-                        INFO_WINDOW "Changes completed successfully."
+                        info_window "Changes completed successfully."
 
                     ;;
                     1)
@@ -146,18 +150,18 @@ case $SELECT in
     ;;
     "Restore")
         # Restore
-        if [ -e $OSRE_BAK ]; then
-            OKPRINT "${OSRE_BAK} found."
+        if [ -e $osre_bak ]; then
+            okprint "${osre_bak} found."
 
-            if [ -e $LSBRE_BAK ]; then
-            OKPRINT "${LSBRE_BAK} found."
+            if [ -e $lsbre_bak ]; then
+            okprint "${lsbre_bak} found."
 
             else
-                ERRPRINT "${LSBRE_BAK} not found."
+                errprint "${lsbre_bak} not found."
 
             fi
         else
-            ERRPRINT "${OSRE_BAK} not found."
+            errprint "${osre_bak} not found."
 
         fi
 
@@ -167,19 +171,19 @@ case $SELECT in
         --title $0 \
         --text "Do you want to restore the files?"
 
-        CODE4=$?
+        restore=$?
 
-        case $CODE4 in
+        case $restore in
             0)
                 # 本処理
-                sudo cp $OSRE_BAK $OSRE || ERRPRINT "Error. Failed to copy the file\"${OSRE_BAK}\"."
-                OKPRINT "Restoration of ${OSRE} is complete."
+                sudo cp $osre_bak $osre || errprint "Error. Failed to copy the file\"${osre_bak}\"."
+                okprint "Restoration of ${osre} is complete."
 
-                sudo cp $LSBRE_BAK $LSBRE || ERRPRINT "Error. Failed to copy the file\"${LSBRE_BAK}\"."
-                OKPRINT "Restoration of ${LSBRE} is complete."
+                sudo cp $lsbre_bak $lsbre || errprint "Error. Failed to copy the file\"${lsbre_bak}\"."
+                okprint "Restoration of ${lsbre} is complete."
 
-                OKPRINT "Restore completed successfully."
-                INFO_WINDOW "Restore completed successfully."
+                okprint "Restore completed successfully."
+                info_window "Restore completed successfully."
             ;;
             1)
                 :
@@ -188,10 +192,10 @@ case $SELECT in
 
     ;;
     *)
-        ERRPRINT "Error. Exception occured."
+        errprint "Error. Exception occured."
 
     ;;
 esac
 
 
-CALL
+call
