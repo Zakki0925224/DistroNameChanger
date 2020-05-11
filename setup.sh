@@ -17,6 +17,15 @@ elif [ $1 = "uninstall" ]; then
     rm /usr/bin/DistroNameChanger
     echo "${view} The uninstall is complete."
 
+elif [ $1 = "check" ]; then
+    if [ -e "/usr/bin/DistroNameChanger" ]; then
+        echo "${view} DistroNameChanger is installed."
+    
+    else
+        echo "${view} DistroNameChanger is not installed."
+    
+    fi
+
 else
     echo "${view} Error. The command \"${1}\" cannot be recognized."
 
