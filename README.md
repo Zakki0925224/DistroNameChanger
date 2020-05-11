@@ -24,7 +24,7 @@ neofetchの"OS"の項目を書き換えることができます。
 ```
 ### 起動
 ```Bash
-    sudo DistroNameChanger
+    DistroNameChanger
 ```
 ### インストールチェッカー
 DistroNameChangerがインストールされているかどうかをチェックします。
