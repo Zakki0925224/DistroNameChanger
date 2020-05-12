@@ -9,6 +9,7 @@ osre_bak="$HOME/os-release.bak"
 lsbre_bak="$HOME/lsb-release.bak"
 
 oldname=$(lsb_release -d | awk -F "\t" '{print $2}' | awk 'BEGIN{ORS = ""}{print $0}')
+bakname=$(cat ${osre_bak} | head -n5 | tail -n1 | cut -c 13- | sed 's/^.*"\(.*\)".*$/\1/')
 
 
 # error_window関数
@@ -175,7 +176,7 @@ case $select in
         --question \
         --width 350 \
         --title $0 \
-        --text "Do you want to restore the files?"
+        --text "Do you want to restore the files?\nChange \"${oldname}\" to \"${bakname}\" ."
 
         restore=$?
 
