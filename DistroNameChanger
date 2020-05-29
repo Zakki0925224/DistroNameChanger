@@ -5,12 +5,11 @@ osre="/usr/lib/os-release"
 lsbre="/etc/lsb-release"
 
 # os-releaseとlsb-releaseのバックアップ先です。自由に変更できます。
+# MEMO: $HOMEが/home/"user" から /root に変わる（sudoで実行してるから？）
 osre_bak="$HOME/os-release.bak"
 lsbre_bak="$HOME/lsb-release.bak"
 
 oldname=$(lsb_release -d | awk -F "\t" '{print $2}' | awk 'BEGIN{ORS = ""}{print $0}')
-bakname=$(cat ${osre_bak} | head -n5 | tail -n1 | cut -c 13- | sed 's/^.*"\(.*\)".*$/\1/')
-
 
 # error_window関数
 error_window () {
@@ -171,6 +170,9 @@ case $select in
             errprint "${osre_bak} not found."
 
         fi
+
+        # バックアップされたos-releaseのos名を取得
+        bakname=$(cat ${osre_bak} | head -n5 | tail -n1 | cut -c 13- | sed 's/^.*"\(.*\)".*$/\1/')
 
         zenity \
         --question \
